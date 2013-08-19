@@ -127,3 +127,23 @@ iteritems方法的作用大致相同，但是会返回一个迭代器对象而不是列表。
 11、setdefault：类似于get方法。获得与给定键相关联的值，除此之外还能在字典中不含有给定键的情况下设定相应的键值。
 12、update：利用一个字典项更新另外一个字典。提供的字典中的项会被添加到旧的字典中，若有相同的键则会进行覆盖。update可以和映射、拥有键值对的队列或者其他可以迭代的对象以及关键字参数一起调用。
 13、values和itervalues：以列表的形式返回字典中的值（itervalues返回值的迭代器）。与返回键的列表不同的是返回值的列表中可以包含重复的元素。
+
+使用print打印表达式——不管是字符串还是其他类型进行自动转换后的字符串，事实上打印多个表达式也是可行的，只要将它们用逗号隔开就好。如果在结尾处加上逗号，那么接下来的语句会与前一条语句在同一行打印。
+例:print "Hello,",
+   print "World!" 输出Hello World！
+
+把某事件作为另一个事导入
+import somemodule
+from somemodule import somefunction
+from somemodule import somefunction,anotherfunction,yetanotherfunction
+from somemodule import *
+在语句末尾增加一个as子句，在该子句后给出名字，或为整个模块提供别名。
+例;import math as foobar 
+   foobar.sqrt(4)
+也可以为函数提供别名。例：from math import sqrt as foobar 
+
+语句块是在条件为真时执行多次的一组语句。在代码前置空格来缩进语句即可创建语句块。块中的每行都应该缩进同样的量。冒号用来标识语句块的开始，块中的每一个语句都是缩进的，当回退到和已经闭合的块一样的缩进量时，就表示当前快已经结束了。
+
+下面的值作为布尔表达式的时候会被解释成假(False)：False None 0 "" () [] {}
+
+使用==运算符判定两个对象是否相等，使用is判定两者是否等同（同一个对象）
