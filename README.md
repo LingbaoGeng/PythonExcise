@@ -1,4 +1,4 @@
 PythonExcise
 ============
 
-This is a file which is used to study Python
+This is a repository which is used to study IT knowledge.
