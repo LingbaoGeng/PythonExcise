@@ -178,3 +178,124 @@ continue：让当前的迭代结束，跳到下一轮循环的开始。（跳过剩余的循环体，但是不结束
 finally子句肯定会被执行，不管try子句中是否发生异常。
 
 在python中创建一个构造方法：__init__
+
+生成器是由两部分组成：生成器的函数和生成器的迭代器。生成器的函数是用def语句定义的，包含yield部分，生成器的迭代器是这个函数返回的部分。
+一个带有yield的函数就是一个gennerator，它和普通的函数不同，生成一个generator看起来像函数调用，但不会执行任何函数代码，直到对其调用next（）才开始执行。每执行到一个yield语句就会中断，并返回一个迭代值，下次执行时从yield的下一个语句继续执行。
+
+
+字符集：使用中括号括住字符串来创建字符集。例：[a-zA-Z0-9]能够匹配任意大小写字母和数字。为了反转字符集可以在开头使用^字符。例：[^abc]可以匹配任何除了a、b、c之外的字符。
+在字符串的每个字符都各不相同的情况下，字符集是很好用的，但是如果只想匹配字符串就不能使用字符集或者通配符来指定某个特定的模式了。要用选择项的特殊字符：管道符号|。例：'python|perl'有些时候不需要对整个模式使用选择运算符——只是模式的一部分。这时可用圆括号括起需要的部分，或称子模式。例：‘p(ython|erl)’
+在子模式后面加上问号，就变成了可选项。它可能出现在匹配字符串中，但并非必需的。例:r'(http://)?(www\.)?python\.org'
+
+只想在字符串的开头而不是其他位置匹配子字符串，可以使用脱字符^标记开始。例：'^ht+p'.类似的字符串结尾用美元符号$标识。
+
+打开文件：open(name[,mode[,buffering]])
+open函数使用一个文件名作为唯一的强制参数，返回一个文件对象。模式和缓冲区参数是可选的。
+
+在文件中随意移动读取位置是可以的，可以使用类文件对象seek和tell来直接访问感兴趣的部分（这种做法称为随机访问）
+seek有三种模式：
+f.seek(p,0)：移动当文件第p个字节处，绝对位置。
+f.seek(p,1)：移动到相对于当前位置之后的p个字节
+f.seek(p,2)：移动到相对于文章尾之后的p个字节
+
+tell函数：返回文件读取指针的位置。
+
+f.readline()：读取单独的一行（从当前的位置开始直到一个换行符出现，也读取这个换行符），或者使用一个非负的整数作为readline可以读取的字符或者字节的最大值。
+f.readlines()：读取一个文件中的所有行并将其作为列表返回。
+f.writelines()：传给一个字符串的列表（实际上任何序列或者可迭代的对象都行），它会把所有的字符串写入文件（或流）注意：程序不会增加新行，需要自己添加。
+
+with open("somefile.txt") as somefile:
+	do_something(somefile)
+with语句可以打开文件并且将其赋值到变量上。之后可以将数据写入语句体中的文件。文件在语句结束后会被自动关闭，即使是由于异常引起的结束也是如此。
+
+为了使用基础数据库系统，首先必须连接到它。需要使用connect函数。该函数返回连接对象，这个对象表示目前和数据库的会话。
+
+一个套接字就是一个socket模块中的socket类的实例。它的实例化需要3个参数：第一个参数是地址族（默认是socket.AF_INET）第二个参数是流（默认是socket.SOCK_STREAM）或数据报(socket.SOCK_DGRAM)第三个参数是使用的协议（默认是0，使用默认值即可）。对于一个普通的套接字，不需要提供任何参数。
+
+使用socket.socket(socket_family,socket_type,protocol=0)
+服务器端套接字函数：
+1、s.bind() 绑定地址（主机名、端口号对）到套接字
+2、s.listen() 开始监听TCP
+3、s.accept() 被动接受TCP客户端连接，（阻塞式）等待连接到来
+
+客户端套接字函数：
+1、s.connect() 主动初始化TCP服务器连接
+2、s.connect_ex() connect函数的扩展版本，出错时返回出错码，而不是抛出异常
+
+公共用途的套接字函数：
+1、s.recv() 接受TCP数据
+2、s.send() 发送TCP数据
+3、s.sendall() 完整发送TCP数据
+4、s.recvfrom() 接收UDP数据
+5、s.sendto() 发送UDP数据
+6、s.getpeername() 连接到当前套接字的远端地址（TCP连接）
+7、s.getsockname() 当前套接字的地址
+8、s.getsockopt() 返回指定套接字的参数
+9、s.setsockopt() 设置指定套接字的参数
+10、s.close()  关闭套接字
+
+使用socket.gethostname()可以得到当前主机名。在这种情况下，一个地址就是一个格式为(host,port)的元组。
+
+服务器段套接字使用bind方法后，再调用listen方法去监听这个给定的地址。客户端套接字使用connect方法连接到服务器在connect方法中使用的地址与bind方法中的地址相同。listen方法中只有一个参数，即服务器未处理的连接的长度。服务器端套接字开始监听后就可以接受客户端的连接。这个步骤使用accept方法来完成。这个方法会阻塞（等待）直到客户端连接，然后该方法返回一个格式为（client,address）的元组。client是一个客户端套接字，address是一个(host,port)的元组。
+
+套接字有两个方法：send和recv（用于接收），用于传输数据。可以使用字符串参数调用send已发送数据，用一个所需的最大字节数作为参数调用recv来接收数据。如果不确定使用哪个数字比较好，那么1024是个很好的选择。
+
+打开远程文件：使用来自urllib模块的urlopen。返回一个链接到网页的类文件对象。这个类文件支持close、read、readline、readlines方法，也支持迭代。
+
+获取远程文件：使用urlretrieve下载文件并在本地文件中存储一个文件的副本。urltrieve返回一个元组(filename,headers),如果要为下载的副本指定文件名，可以在urlretrieve函数的第2个参数中给出。
+例：urlretrieve("http://www.python.org","c:\\python_webpage.html")如果没有指定文件名，文件就会放在临时的位置，用open函数可以打开，如果完成对它的操作，调用urlcleanup函数，不要提供参数，该函数负责清理工作。
+
+有三种方法可以试想处理多个连接：分叉（forking）、线程（threading）、异步I/O（asynchronous I/O）
+
+beautifullsoup分析html
+Beautiful Soup是用python写的一个HTML/XML的解释器，它可以很好的处理不规范标记并生成剖析树。
+导入Beautiful Soup的导入：
+from BeautifulSoup import BeautifulSoup   #for processing HTML
+from BeautifulSoup import BeautifulStoneSoup #for processing XML
+import BeautifulSoup    #to get everything
+
+0、初始化：
+soup=BeautifulSoup(html) #html为html源代码字符串 type(html)=str
+
+1、用tag获取相应代码块的剖析树：
+#当用tag作为搜索条件时，我们获取的包含这个tag块的剖析树：
+#<tag><xxx>ooo</xxx></tag>
+#这里以获取head为例
+head=soup.find("head")
+or head=soup.head
+or head=soup.contents[0].contents[0]
+contents属性是一个列表，里面保存了该剖析树的直接儿子。
+html=soup.contents[0] #<html>......</html>
+head=html.contents[0] #<head>......</head>
+body=html.contents[1] #<body>......</body>
+
+2、用contents[]，parent,next_sibling,previous_sibling寻找父子兄弟tag。
+body=soup.body
+html=body.parent #html是body的父亲
+head=body.previous_sibling #head和body在同一层，是body的前一个兄弟
+p1=body.contents[0]  #p1,p2都是body的儿子，我们用contents[0]取得p1
+p2=p1.next_sibling #p2和p1在同一层，是p1的后一个兄弟，当然用body.contents[1]也可以得到
+
+3、用find()，find_parent()，find_next_sibling()，find_previous_sibling()寻找祖先或者子孙tag。
+find方法是以当前节点为开始，遍历整个子树，找到后返回。这些方法的复数形式，会找到所有符合要求的tag，以list的方式返回。
+对应关系:find->findall，find_parent->find_parents，find_next_sibling->find_next_siblings...
+find的几种用法(其它的类比)：
+find(name=None,arrts={},recursive=True,text=None,limit,**kwargs)
+搜索tag：
+find(tagname) #直接搜索名为tagname的tag
+find(list) #搜索在list中的tag，如find(["head","body"])
+find(dict) #搜索在dict中的tag,如find({"head":True,"body":True})
+find(re.compile(""))  #搜索符合正规的tag，如find(re.compile("^p"))搜索以p开头的tag
+find(True)  #搜索所有的tag
+find(lambda)  #搜索函数返回结果为true的tag，如find(lambda name:if len(name)==1)搜索长度为1的tag
+搜索属性（arrts）
+find(id='xxx')  #寻找id属性为xxx的
+find(attrs={id=re.compile("xxx"),algin="xxx"}) #寻找id属性符合正则且algin属性为xxx的
+find(attrs={id=True,algin=None})  #寻找id操作但是没有algin属性的
+搜索文字（text）：
+注意，文字的搜索会导致其他搜索给的值如：tag、attrs都失效，方法与搜索attrs一致。
+recursive、limit：
+当recursive=False表示只搜索直接儿子，否则搜索整个子树，默认为True
+当使用findAll或者类似返回list的方法时，limit属性用于限制返回的数量。如findAll("p",limit=2)返回首先找到的两个tag
+
+soup.prettify()规范化html，包括缩进和自动闭合部分标签
