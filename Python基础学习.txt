@@ -163,6 +163,17 @@ continue：让当前的迭代结束，跳到下一轮循环的开始。（跳过剩余的循环体，但是不结束
 例：def hello(name):
 	return "Hello,"+name+"!"
 
+Python中用默认值声明变量的语法是所有的位置参数必须出现在任何一个默认参数之前
+
+Python允许用lambda关键字创建匿名函数，一个完整的lambda语句代表了一个表达式，这个表达式的定义必须和声明放在同一行。用lambda创建一个函数对象，为了留住这个对象，我们将它保存在一个变量中，以便以后可以随时调用。例：def add(x,y):return x+y <=>lambda x,y:x+y
+
+
+函数式编程的内建函数：
+apply(func[,nkw],[,kw]) 用可选的参数来调用func，nkw为非关键字参数，kw为关键字参数，返回值为函数调用的返回值。
+filter(func,seq) 调用一个布尔函数func来迭代遍历每个seq中的元素，返回一个使func返回值为True的元素序列
+map(func,swq1[,seq2]) 将函数func作用于给定序列（s）的每个元素，并用一个列表来提供返回值，如果func为None，func表现为一个身份函数，返回一个含有每个序列中元素集合的n个元组的序列。
+reduce(func,seq[,init]) 将二元函数作用于seq序列的元素，每次携带一对（先前的结果以及下一个序列元素），连续地将现有的结果和下一个值作用在获得的随后的结果上，最后减少我们的序列为一个单一的返回值，如果初始值init给定，第一个比较会是init和第一个序列元素而不是序列的头两个元素。
+
 新式类的语法中，需要在模块或者脚本开始的地方放置赋值语句__metaclass__=type
 为了让方法或者特性变为私有（从外部无法访问），只要在它的名字前面加上双下划线即可。类的内部定义中，所有以双下划线开始的名字都被翻译成前面加上单下划线和类名的形式。
 
@@ -239,6 +250,50 @@ with语句可以打开文件并且将其赋值到变量上。之后可以将数据写入语句体中的文件。文件
 服务器段套接字使用bind方法后，再调用listen方法去监听这个给定的地址。客户端套接字使用connect方法连接到服务器在connect方法中使用的地址与bind方法中的地址相同。listen方法中只有一个参数，即服务器未处理的连接的长度。服务器端套接字开始监听后就可以接受客户端的连接。这个步骤使用accept方法来完成。这个方法会阻塞（等待）直到客户端连接，然后该方法返回一个格式为（client,address）的元组。client是一个客户端套接字，address是一个(host,port)的元组。
 
 套接字有两个方法：send和recv（用于接收），用于传输数据。可以使用字符串参数调用send已发送数据，用一个所需的最大字节数作为参数调用recv来接收数据。如果不确定使用哪个数字比较好，那么1024是个很好的选择。
+
+socketServer模块：是标准库中一个高级别的模块，用于简化实现网络客户端与服务器所需的大量样板代码。
+SocketServer模块的类：
+1、BaseServer：包含服务器的核心功能与混合（mix-in）类挂钩，这个类只用于派生，不会生成这个类的实例
+2、TCPServer/UDPServer：基本的网络同步TCP/UDP服务器
+3、ForkingMixIn/ThreadingMixIn：实现了核心的进程化或者线程化的功能，作为混合类，与服务器类一并使用以提供一些异步特性，这个类不会直接实例化
+4、ForkingTCPServer/ThreadingUDPServer：ForkingMixIn和TCPServer/UDPServer的组合
+5、ThreadingTCPServer/ThreadingUDPServer:ThreadingMixIn和TCPServer/UDPServer的组合
+6、BaseRequestHandler：包含处理服务请求的核心功能。这个类只用于派生，不会生成这个类的实例。可与考虑使用StreamRequestHandler/DatagramRequestHandler
+7、StreamRequestHandler/DatagramRequestHandler：用于TCP/UDP服务器的服务处理工具。
+
+
+thread模块和锁对象：
+start_new_thread(function,args,kwargs=None) 产生一个新的线程，在新线程中用指定的参数和可选的kwargs来电泳这个函数
+allocate_lock（） 分配一个LockType类型的锁对象
+exit（） 让线程退出
+LockType类型锁对象方法：
+acquire（wait=None） 尝试获取锁对象
+locked（） 如果获取了锁对象返回True，否则返回False
+release（） 释放锁
+
+threading模块对象：
+Thread 表示一个线程的执行的对象
+Lock 锁原语对象（跟thread里的锁对象相同）
+RLock 可重入锁对象。使单线程可以再次获得已经获得了的锁（递归锁定）
+Condition 条件变量能让一个线程停下来，等待其他线程满足了某个条件。如状态改变或值的改变
+Event 通用的条件变量。多个线程可以等待某个事件的发生，在事件发生后，所有的线程都被激活
+Semaphore 为等待锁的线程提供一个类似等候室的结构
+BounderSemaphore 与Semaphore类似，只是它不允许超过初始值
+Timer 与Thread相似，只是要等待一段时间后开始运行。
+ 
+用Thread类创建线程：
+1、创建一个Thread的实例，传给它一个函数
+2、创建一个Thread的实例，传给它一个可调用的类对象
+3、从Thread派生出一个子类，创建一个这个子类的实例。
+函数：
+start() 开始线程的执行
+run() 定义线程的功能的函数（一般会被子类重写）
+join(timeout=None) 程序挂起，直到线程结束，如果给了timeout，则最多阻塞timeout秒
+getName() 返回线程的名字
+setName() 设置线程的名字
+isAlive() 布尔标志，表示这个线程是否还在运行中
+isDaemon() 返回线程的daemon标志
+setDaemon(daemonic) 把线程的daemon标志位daemonic(一定要在调用start（）函数之前调用)
 
 打开远程文件：使用来自urllib模块的urlopen。返回一个链接到网页的类文件对象。这个类文件支持close、read、readline、readlines方法，也支持迭代。
 
